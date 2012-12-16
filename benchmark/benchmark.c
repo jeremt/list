@@ -31,6 +31,7 @@ static void bm_push() {
   while (n--)
     list_push(list, "foo");
   stop();
+  list_destroy(list);
 }
 
 static void bm_unshift() {
@@ -43,6 +44,7 @@ static void bm_unshift() {
   while (n--)
     list_unshift(list, "foo");
   stop();
+  list_destroy(list);
 }
 
 static void bm_find() {
@@ -57,6 +59,7 @@ static void bm_find() {
   start();
   list_find(list, "bar");
   stop();
+  list_destroy(list);
 }
 
 static void bm_pop() {
@@ -70,9 +73,9 @@ static void bm_pop() {
   }
   t_node *node;
   start();
-  while ((node = list_pop(list)))
-    ;
+  while ((node = list_pop(list)));
   stop();
+  list_destroy(list);
 }
 
 static void bm_shift() {
@@ -87,23 +90,44 @@ static void bm_shift() {
   start();
   while ((node = list_shift(list)));
   stop();
+  list_destroy(list);
 }
 
-static t_list *list;
-
 static void bm_at() {
+  t_list *list;
+  int n;
+
+  list = list_new();
+  n = nnodes;
+  while (n--)
+    list_unshift(list, "foo");
   start();
   list_at(list, 100000);
   stop();
+  list_destroy(list);
 }
 
 static void bm_at2() {
+  t_list *list;
+  int n;
+
+  list = list_new();
+  n = nnodes;
+  while (n--)
+    list_unshift(list, "foo");
   start();
   list_at(list, 1000000);
   stop();
 }
 
 static void bm_at3() {
+  t_list *list;
+  int n;
+
+  list = list_new();
+  n = nnodes;
+  while (n--)
+    list_unshift(list, "foo");
   start();
   list_at(list, -100000);
   stop();
@@ -143,23 +167,32 @@ static void bm_slice() {
   stop();
 }
 
-int main(int argc, const char **argv){
-  int n = nnodes;
-  list = list_new();
+static void bm_destroy() {
+  t_list *list;
+  int n;
 
+  n = nnodes;
+  list = list_new();
   while (n--)
-    list_unshift(list, "foo");
-  puts("\n 10,000,000 nodes\n");
+    list_push(list, "foo");
+  start();
+  list_destroy(list);
+  stop();
+}
+
+int main(void) {
+  printf("\n \x1b[1m%d nodes\x1b[m\n\n", nnodes);
   bm("unshift", bm_unshift);
   bm("push", bm_push);
   bm("shift", bm_shift);
   bm("pop", bm_pop);
   bm("find (last node)", bm_find);
-  bm("at(100,000)", bm_at);
-  bm("at(1,000,000)", bm_at2);
-  bm("at(-100,000)", bm_at3);
+  bm("at(100000)", bm_at);
+  bm("at(1000000)", bm_at2);
+  bm("at(-100000)", bm_at3);
   bm("concat", bm_concat);
   bm("slice", bm_slice);
+  bm("destroy", bm_destroy);
   puts("");
   return 0;
 }
