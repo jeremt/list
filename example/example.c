@@ -15,10 +15,6 @@ static void num_print(t_node *n) {
   printf("    • %d\n", *((int *)n->val));
 }
 
-static int num_cmp(t_node *a, t_node *b) {
-  return *((int *)(a->val)) < *((int *)(b->val));
-}
-
 static void *num(int n) {
   int *ptr;
 

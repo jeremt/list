@@ -7,11 +7,15 @@ AR ?= ar
 CC ?= gcc
 PREFIX ?= /usr/local
 
-CFLAGS = -O3 -std=c99 -Wall
+IFLAGS = -I inc
 
-SRC = lib/list.c
+OFLAGS = -O3
 
-OBJ = $(SRC:.c=.o)
+CFLAGS = -std=c99 -Wall $(IFLAGS) $(OFLAGS)
+
+LIB = lib/list.c
+
+OBJ = $(LIB:.c=.o)
 
 #
 # Default rule
@@ -25,18 +29,6 @@ all: build/liblist.a
 
 %.o: %.c
 	$(CC) $< $(CFLAGS) -c -o $@ -I lib
-
-#
-# Install/Uninstall the library
-#
-
-install: all
-	cp -f build/liblist.a $(PREFIX)/lib/liblist.a
-	cp -f src/list.h $(PREFIX)/include/list.h
-
-uninstall:
-	rm -f $(PREFIX)/lib/liblist.a
-	rm -f $(PREFIX)/include/list.h
 
 #
 # Build the library
@@ -56,6 +48,7 @@ bin/test: test/test.o $(OBJ)
 
 test: bin/test
 	@./$<
+	@echo $(CP)
 
 #
 # Run benchmarks
@@ -94,11 +87,9 @@ re: fclean all
 help:
 	@echo ""
 	@echo "  • \033[1mmake\033[m            build the library"
-	@echo "  • \033[1mmake install\033[m    install the library into your system"
-	@echo "  • \033[1mmake uninstall\033[m  uninstall the library into your system"
 	@echo "  • \033[1mmake test\033[m       run unit tests"
 	@echo "  • \033[1mmake benchmark\033[m  run benchmarks"
 	@echo "  • \033[1mmake example\033[m    simple usage example"
 	@echo ""
 
-.PHONY: test benchmark clean install uninstall
+.PHONY: test benchmark example clean
