@@ -253,7 +253,7 @@ t_list *list_slice(t_list *this, int from, int to) {
   if (to < 0 || to > this->length)
     to = this->length;
   for (i = 0 ; i < this->length ; i++) {
-    if (from > i && i < to)
+    if (i >= from && i < to)
       list_push(result, it->val);
     it = it->next;
   }

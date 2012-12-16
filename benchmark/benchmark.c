@@ -109,6 +109,40 @@ static void bm_at3() {
   stop();
 }
 
+static void bm_concat() {
+  t_list *list;
+  t_list *one;
+  t_list *two;
+  int n;
+
+  n = nnodes >> 1;
+  one = list_new();
+  while (n--)
+    list_push(one, "foo");
+  n = nnodes >> 1;
+  two = list_new();
+  while (n--)
+    list_push(two, "bar");
+  start();
+  list = list_concat(one, two);
+  stop();
+  (void)list;
+}
+
+static void bm_slice() {
+  t_list *list;
+  int n;
+
+  n = nnodes;
+  list = list_new();
+  while (n--)
+    list_push(list, "foo");
+  start();
+  (void)list_slice(list, 0, nnodes >> 1);
+  (void)list_slice(list, nnodes >> 1, nnodes);
+  stop();
+}
+
 int main(int argc, const char **argv){
   int n = nnodes;
   list = list_new();
@@ -116,14 +150,16 @@ int main(int argc, const char **argv){
   while (n--)
     list_unshift(list, "foo");
   puts("\n 10,000,000 nodes\n");
-  bm("unshift", bm_unshift);  
+  bm("unshift", bm_unshift);
   bm("push", bm_push);
-  bm("shift", bm_shift);  
-  bm("pop", bm_pop);  
-  bm("find (last node)", bm_find);  
-  bm("at(100,000)", bm_at);  
-  bm("at(1,000,000)", bm_at2);  
-  bm("at(-100,000)", bm_at3);  
+  bm("shift", bm_shift);
+  bm("pop", bm_pop);
+  bm("find (last node)", bm_find);
+  bm("at(100,000)", bm_at);
+  bm("at(1,000,000)", bm_at2);
+  bm("at(-100,000)", bm_at3);
+  bm("concat", bm_concat);
+  bm("slice", bm_slice);
   puts("");
   return 0;
 }
