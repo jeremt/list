@@ -43,9 +43,6 @@ static void test_list_deletion() {
   assert(a == list_shift(list));
   assert(2 == list->length);
   assert(b == list->head);
-  assert(NULL == list->head->prev && "new head node prev is not NULL");
-  assert(NULL == a->prev && "detached node prev is not NULL");
-  assert(NULL == a->next && "detached node next is not NULL");
   
   assert(b == list_shift(list));
   assert(1 == list->length);
