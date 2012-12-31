@@ -13,9 +13,19 @@ OFLAGS = -O3
 
 CFLAGS = -std=c99 -Wall $(IFLAGS) $(OFLAGS)
 
-LIB = lib/list.c
+SRC = \
+	lib/list_at.c \
+	lib/list_concat.c \
+	lib/list_delete.c \
+	lib/list_destroy.c \
+	lib/list_each.c \
+	lib/list_find.c \
+	lib/list_insert.c \
+	lib/list_join.c \
+	lib/list_new.c \
+	lib/list_slice.c
 
-OBJ = $(LIB:.c=.o)
+OBJ = $(SRC:.c=.o)
 
 #
 # Default rule
