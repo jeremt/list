@@ -5,7 +5,8 @@
 
 AR ?= ar
 CC ?= gcc
-PREFIX ?= /usr/local
+
+NAME = liblist.a
 
 IFLAGS = -I inc
 
@@ -31,7 +32,7 @@ OBJ = $(SRC:.c=.o)
 # Default rule
 #
 
-all: build/liblist.a
+all: $(NAME)
 
 #
 # Compilation rule
@@ -44,7 +45,7 @@ all: build/liblist.a
 # Build the library
 #
 
-build/liblist.a: $(OBJ)
+$(NAME): $(OBJ)
 	@mkdir -p build
 	$(AR) rc $@ $^
 
